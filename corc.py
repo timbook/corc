@@ -15,7 +15,6 @@ curses.curs_set(0)   # Hide cursor
 HEADER = " CHECKLIST - My Todos".ljust(curses.COLS, ' ')
 FOOTER = " - ".join([
     "(n) to add new item",
-    "(r) to rename",
     "(space) to toggle check",
     "(d) to delete",
     "(q) to quit"
@@ -64,32 +63,35 @@ def main(stdscr):
         c = stdscr.getch()
 
         # TODO:
-        # gg = Top
-        # n = New item
         # r = Rename
 
         if c == ord('q'):
             stdscr.clear()
             os.system("clear")
             break
-        elif c == ord('j'):
+        elif c == ord('j') or c == curses.KEY_DOWN:
             todos.set_selection('down')
-        elif c == ord('k'):
+        elif c == ord('k') or c == curses.KEY_UP:
             todos.set_selection('up')
+        elif c == ord('g'):
+            todos.set_selection('top')
         elif c == ord('G'):
             todos.set_selection('bot')
         elif c == ord(' '):
             todos.toggle()
-        elif c == ord('l'):
+        elif c == ord('l') or c == curses.KEY_RIGHT:
             todos.toggle('check')
-        elif c == ord('h'):
+        elif c == ord('h') or c == curses.KEY_LEFT:
             todos.toggle('uncheck')
         elif c == ord('d'):
+            # TODO: Add deletion buffer
             todos.pop()
         elif c == ord('K'):
             todos.swap('up')
         elif c == ord('J'):
             todos.swap('down')
+        elif c == ord('o') or c == ord('n'):
+            todos.add_new(win)
 
         win.clear()
         win.border()

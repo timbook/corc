@@ -53,3 +53,18 @@ class TodoList:
                 self.todos[self.selection], self.todos[self.selection + 1]
             self.set_selection('down')
 
+    def add_new(self, win):
+        self.todos.insert(self.selection + 1, TodoItem("", False))
+        self.selection += 1
+        win.clear()
+        win.border()
+        self.print_items(win)
+
+        curses.echo()
+        curses.curs_set(1)
+        new_item = win.getstr(self.selection + 1, 5).decode('utf-8')
+        curses.noecho()
+        curses.curs_set(0)
+
+        self.todos[self.selection].name = new_item
+
