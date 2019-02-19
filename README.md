@@ -8,7 +8,6 @@
 Both modes will have vim-like keybindings, because how else should it be?
 
 ## Current todos (ironically not stored in a `corc` list):
-* Ability to add/rename todos.
 * Configure program to store lists/boards in a .json-like structure somewhere on system.
 * Add screen to select list/board before entering.
 * Begin even thinking about the cork board implementation.
