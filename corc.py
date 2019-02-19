@@ -16,7 +16,7 @@ HEADER = " CHECKLIST - My Todos".ljust(curses.COLS, ' ')
 FOOTER = " - ".join([
     "(n) to add new item",
     "(space) to toggle check",
-    "(d) to delete",
+    "(D) to delete",
     "(q) to quit"
 ])
 
@@ -43,14 +43,12 @@ def global_refresh():
     win.refresh()
     win.border()
 
-todos = TodoList(
-    [
-        TodoItem("Walk dog", False),
-        TodoItem("Do dishes", False),
-        TodoItem("Write exam", False),
-        TodoItem("Work out", False)
-    ]
-)
+todos = TodoList([
+    TodoItem("Walk dog", False),
+    TodoItem("Do dishes", False),
+    TodoItem("Write exam", False),
+    TodoItem("Work out", False)
+])
 
 def main(stdscr):
     selection = 0
@@ -61,9 +59,6 @@ def main(stdscr):
         global_refresh()
 
         c = stdscr.getch()
-
-        # TODO:
-        # r = Rename
 
         if c == ord('q'):
             stdscr.clear()
@@ -83,9 +78,10 @@ def main(stdscr):
             todos.toggle('check')
         elif c == ord('h') or c == curses.KEY_LEFT:
             todos.toggle('uncheck')
-        elif c == ord('d'):
-            # TODO: Add deletion buffer
+        elif c == ord('D'):
             todos.pop()
+        elif c == ord('u'):
+            todos.undo()
         elif c == ord('K'):
             todos.swap('up')
         elif c == ord('J'):
