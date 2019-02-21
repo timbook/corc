@@ -69,7 +69,7 @@ class TodoList:
 
         curses.echo()
         curses.curs_set(1)
-        new_item = win.getstr(self.selection + 1, 5).decode('utf-8')
+        new_item = win.getstr(self.selection + 1, 9).decode('utf-8')
         curses.noecho()
         curses.curs_set(0)
 
