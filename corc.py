@@ -19,10 +19,9 @@ if args.new:
 
     # Decides where file will be saved, locally or globally.
     if args.is_global:
-        home_dir = os.environ['HOME']
-        prefix = home_dir + "/.corc/"
-        if not os.path.isdir(home_dir + "/.corc"):
-            os.mkdir(home_dir + "/.corc")
+        prefix = os.environ['HOME'] + "/.corc/"
+        if not os.path.isdir(prefix):
+            os.mkdir(prefix)
     else:
         prefix = "./"
 
@@ -55,6 +54,7 @@ FOOTER = " - ".join([
     "(n) to add new item",
     "(space) to toggle check",
     "(D) to delete",
+    "(s) to save",
     "(q) to quit"
 ])
 
@@ -93,8 +93,14 @@ def main(stdscr):
             stdscr.clear()
             os.system("clear")
             break
-        elif c == ord('s') or c == ord('S'):
+        elif c == ord('s'):
             todos.to_json(FILE)
+        elif c == ord('S'):
+            # TODO: Tell user it's worked somehow
+            todos.to_json(FILE)
+            stdscr.clear()
+            os.system("clear")
+            break
         elif c == ord('j') or c == curses.KEY_DOWN:
             todos.set_selection('down')
         elif c == ord('k') or c == curses.KEY_UP:
