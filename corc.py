@@ -1,8 +1,19 @@
-import sys
 import os
+import sys
 import curses
+# import argparse
 
 from todolist import TodoItem, TodoList
+import argutils
+
+args = argutils.get_args()
+
+todos = TodoList([
+    TodoItem("Walk dog", False),
+    TodoItem("Do dishes", False),
+    TodoItem("Write exam", False),
+    TodoItem("Work out", False)
+])
 
 stdscr = curses.initscr()
 
@@ -21,16 +32,14 @@ FOOTER = " - ".join([
 ])
 
 # Color pairs
-# 1 = Header highlight
-# 2 = Selection blue
-curses.init_pair(1, 0, curses.COLOR_BLUE)
-curses.init_pair(2, curses.COLOR_BLUE, 0)
+curses.init_pair(1, 0, curses.COLOR_BLUE) # Corc header
+curses.init_pair(2, curses.COLOR_BLUE, 0) # Selection blue
 
 # Header and footers
 stdscr.addstr(0, 0, HEADER, curses.color_pair(1))
 stdscr.addstr(curses.LINES - 1, 0, FOOTER)
 
-# Main window
+# List window
 height = curses.LINES - 2
 width = curses.COLS
 start_y = 1
@@ -42,13 +51,6 @@ def global_refresh():
     stdscr.refresh()
     win.refresh()
     win.border()
-
-todos = TodoList([
-    TodoItem("Walk dog", False),
-    TodoItem("Do dishes", False),
-    TodoItem("Write exam", False),
-    TodoItem("Work out", False)
-])
 
 def main(stdscr):
     selection = 0
@@ -90,7 +92,7 @@ def main(stdscr):
             todos.add_new(win)
 
         win.clear()
-        win.border()
+        global_refresh()
     # END EVENT LOOP
 
 if __name__ == "__main__":
