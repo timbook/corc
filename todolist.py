@@ -1,3 +1,4 @@
+import json
 import curses
 
 class TodoItem:
@@ -6,16 +7,18 @@ class TodoItem:
         self.compl = compl
 
 class TodoList:
-    def __init__(self, todos):
+    def __init__(self, todos, name):
         self.todos = todos
+        self.name = name
         self.selection = 0
         self.buffer = []
 
     def print_items(self, win, y=1, x=1):
-        for i, item in enumerate(self.todos):
-            cp = 2 if i == self.selection else 0
-            marker = 'X' if item.compl else ' '
-            win.addstr(1 + i, 1, f"[{marker}] {i + 1} - {item.name}", curses.color_pair(cp))
+        if self.todos:
+            for i, item in enumerate(self.todos):
+                cp = 2 if i == self.selection else 0
+                marker = 'X' if item.compl else ' '
+                win.addstr(1 + i, 1, f"[{marker}] {i + 1} - {item.name}", curses.color_pair(cp))
 
     def set_selection(self, pos):
         if pos == 'down':
@@ -40,7 +43,7 @@ class TodoList:
             deleted_todo = self.todos.pop(self.selection)
             deleted_selection = self.selection
 
-            if self.selection == len(self.todos) - 1:
+            if self.selection >= len(self.todos) - 1:
                 self.set_selection('up')
 
             self.buffer.append((deleted_selection, deleted_todo))
@@ -61,8 +64,9 @@ class TodoList:
             self.set_selection('down')
 
     def add_new(self, win):
-        self.todos.insert(self.selection + 1, TodoItem("", False))
-        self.selection += 1
+        offset = 1 if self.todos else 0
+        self.todos.insert(self.selection + offset, TodoItem("", False))
+        self.selection += offset
         win.clear()
         win.border()
         self.print_items(win)
@@ -74,3 +78,9 @@ class TodoList:
         curses.curs_set(0)
 
         self.todos[self.selection].name = new_item
+
+    def to_json(self, FILE):
+        todo_json = {"name": self.name}
+        todo_json['items'] = {t.name:t.compl for t in self.todos}
+        with open(FILE, 'w') as f:
+            json.dump(todo_json, f)

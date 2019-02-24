@@ -17,6 +17,12 @@ def get_args():
     )
 
     parser.add_argument(
+        "-a", "--name",
+        metavar="NAME",
+        help="Give corc board a name (defaults to filename without .json)."
+    )
+
+    parser.add_argument(
         "-g", "--global",
         dest="is_global",
         action="store_true",

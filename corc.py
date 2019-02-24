@@ -1,19 +1,39 @@
 import os
 import sys
+import json
 import curses
-# import argparse
 
 from todolist import TodoItem, TodoList
 import argutils
 
 args = argutils.get_args()
 
-todos = TodoList([
-    TodoItem("Walk dog", False),
-    TodoItem("Do dishes", False),
-    TodoItem("Write exam", False),
-    TodoItem("Work out", False)
-])
+if args.list:
+    # TODO: List
+    sys.exit(0)
+
+if args.new:
+    # Determine list name. Defaults to filename given.
+    name = args.name if args.name else args.new.replace('.json', '')
+    todos = TodoList([], name)
+
+    # Decides where file will be saved, locally or globally.
+    prefix = os.environ['HOME'] if args.is_global else '.'
+    FILE = prefix + '/' + args.new.replace('.json', '') + ".json"
+
+elif args.using:
+    # TODO
+    pass
+else:
+    # TODO: Use default
+    pass
+
+# todos = TodoList([
+    # TodoItem("Walk dog", False),
+    # TodoItem("Do dishes", False),
+    # TodoItem("Write exam", False),
+    # TodoItem("Work out", False)
+# ], name="TESTER TODO")
 
 stdscr = curses.initscr()
 
@@ -66,6 +86,8 @@ def main(stdscr):
             stdscr.clear()
             os.system("clear")
             break
+        elif c == ord('s') or c == ord('S'):
+            todos.to_json(FILE)
         elif c == ord('j') or c == curses.KEY_DOWN:
             todos.set_selection('down')
         elif c == ord('k') or c == curses.KEY_UP:
