@@ -18,8 +18,15 @@ if args.new:
     todos = TodoList([], name)
 
     # Decides where file will be saved, locally or globally.
-    prefix = os.environ['HOME'] if args.is_global else '.'
-    FILE = prefix + '/' + args.new.replace('.json', '') + ".json"
+    if args.is_global:
+        home_dir = os.environ['HOME']
+        prefix = home_dir + "/.corc/"
+        if not os.path.isdir(home_dir + "/.corc"):
+            os.mkdir(home_dir + "/.corc")
+    else:
+        prefix = "./"
+
+    FILE = prefix + args.new.replace('.json', '') + ".json"
 
 elif args.using:
     # TODO
